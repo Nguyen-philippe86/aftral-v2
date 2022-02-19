@@ -50,11 +50,20 @@ class Model
         }
     }
 
-    public function insert()
+    public function affichageProduits()
     {
-        if (isset($_POST['submit'])) {
-            echo 'YES';
-        }
+
+        $sth = $this->conn->prepare('SELECT p.*,c.categories_name,u.username 
+        FROM products AS p 
+        LEFT JOIN categories AS c ON p.category_id = c.categories_id 
+        LEFT JOIN users AS u ON p.user_id = u.id 
+        ORDER BY category_id, products_name');
+        $sth->execute();
+        while ($products = $sth->fetchAll(PDO::FETCH_ASSOC)){
+            $data[] = $products;
+        };
+        return $data;
+
     }
 
 }
